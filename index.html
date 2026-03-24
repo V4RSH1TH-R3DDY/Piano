@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piano</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🎹 Piano</h1>
+    <p>Click keys · Use your keyboard · Or touch on mobile</p>
+  </header>
+
+  <div class="controls">
+    <label for="volume">Volume</label>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.9" />
+  </div>
+
+  <div class="piano-wrapper">
+    <div id="piano"></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-title">Keyboard shortcuts (two playable octaves)</div>
+    <span><kbd>A</kbd> C3</span>
+    <span><kbd>W</kbd> C#3</span>
+    <span><kbd>S</kbd> D3</span>
+    <span><kbd>E</kbd> D#3</span>
+    <span><kbd>D</kbd> E3</span>
+    <span><kbd>F</kbd> F3</span>
+    <span><kbd>T</kbd> F#3</span>
+    <span><kbd>G</kbd> G3</span>
+    <span><kbd>Y</kbd> G#3</span>
+    <span><kbd>H</kbd> A3</span>
+    <span><kbd>U</kbd> A#3</span>
+    <span><kbd>J</kbd> B3</span>
+    <span><kbd>K</kbd> C4</span>
+    <span><kbd>O</kbd> C#4</span>
+    <span><kbd>L</kbd> D4</span>
+    <span><kbd>P</kbd> D#4</span>
+    <span><kbd>;</kbd> E4</span>
+  </div>
+
+  <script src="piano.js"></script>
+</body>
+</html>

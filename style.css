@@ -1,0 +1,263 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+header {
+  text-align: center;
+}
+
+header h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #e0c080 0%, #f5e6b8 50%, #c8a84b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+header p {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #888;
+  letter-spacing: 0.04em;
+}
+
+/* ── Controls ─────────────────────────────────────────────────────────────── */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px 20px;
+}
+
+.controls label {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.controls input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 130px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #c8a84b, #444);
+  outline: none;
+  cursor: pointer;
+}
+
+.controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e0c080;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(224,192,128,0.5);
+}
+
+/* ── Piano wrapper ────────────────────────────────────────────────────────── */
+.piano-wrapper {
+  background: linear-gradient(180deg, #2a1a0a 0%, #1a0f05 100%);
+  border-radius: 16px;
+  padding: 24px 20px 14px;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.6),
+    0 2px 8px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  border: 2px solid #3a2a14;
+  overflow-x: auto;
+  max-width: 100vw;
+}
+
+/* ── Piano keyboard ───────────────────────────────────────────────────────── */
+#piano {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Each octave is a relative container so black keys can be positioned */
+.octave {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+/* ── White keys ───────────────────────────────────────────────────────────── */
+.key.white {
+  position: relative;
+  width: 44px;
+  height: 180px;
+  background: linear-gradient(180deg,
+    #f8f5ee 0%,
+    #f0ece3 60%,
+    #e8e2d5 100%
+  );
+  border: 1px solid #bbb;
+  border-radius: 0 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  cursor: pointer;
+  box-shadow:
+    2px 4px 6px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset -1px 0 0 rgba(0,0,0,0.05);
+  transition: background 60ms, box-shadow 60ms, transform 60ms;
+  z-index: 1;
+}
+
+.key.white:hover {
+  background: linear-gradient(180deg, #fffcf5 0%, #f7f3ea 60%, #f0ebe0 100%);
+}
+
+.key.white.active {
+  background: linear-gradient(180deg, #dfd8c8 0%, #d4ccba 100%);
+  box-shadow:
+    1px 2px 3px rgba(0,0,0,0.4),
+    inset 0 2px 4px rgba(0,0,0,0.12);
+  transform: translateY(2px);
+}
+
+/* ── Black keys ───────────────────────────────────────────────────────────── */
+.key.black {
+  position: absolute;
+  width: 26px;
+  height: 112px;
+  background: linear-gradient(180deg,
+    #3a3a3a 0%,
+    #1a1a1a 60%,
+    #0d0d0d 100%
+  );
+  border: 1px solid #000;
+  border-radius: 0 0 5px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 5px;
+  cursor: pointer;
+  box-shadow:
+    2px 5px 8px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset -1px 0 0 rgba(255,255,255,0.04);
+  z-index: 2;
+  transition: background 60ms, box-shadow 60ms, transform 60ms;
+}
+
+.key.black:hover {
+  background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 60%, #181818 100%);
+}
+
+.key.black.active {
+  background: linear-gradient(180deg, #555 0%, #333 100%);
+  box-shadow:
+    1px 2px 4px rgba(0,0,0,0.8),
+    inset 0 2px 4px rgba(0,0,0,0.3);
+  transform: translateY(2px);
+}
+
+/* ── Black key positioning within each octave ─────────────────────────────── */
+/* C# is after C (1st white = 0..43, C# sits at 31px) */
+.octave .key.black[data-note="C#"] { left: 30px; }
+.octave .key.black[data-note="D#"] { left: 75px; }
+.octave .key.black[data-note="F#"] { left: 162px; }
+.octave .key.black[data-note="G#"] { left: 207px; }
+.octave .key.black[data-note="A#"] { left: 252px; }
+
+/* ── Labels ───────────────────────────────────────────────────────────────── */
+.key-label {
+  font-size: 10px;
+  font-weight: 600;
+  pointer-events: none;
+  letter-spacing: 0.02em;
+}
+
+.key.white .key-label { color: #888; }
+.key.black .key-label { color: #666; }
+
+.kb-hint {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  pointer-events: none;
+  margin-top: 2px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 3px;
+  padding: 1px 3px;
+  letter-spacing: 0;
+}
+
+.key.white .kb-hint { color: #aaa; }
+.key.black .kb-hint { color: #888; }
+
+/* ── Keyboard legend ──────────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 640px;
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.legend-title {
+  width: 100%;
+  text-align: center;
+  color: #888;
+  font-size: 0.82rem;
+  margin-bottom: 2px;
+}
+
+.legend kbd {
+  display: inline-block;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #ccc;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .key.white { width: 36px; height: 150px; }
+  .key.black { width: 22px; height: 92px;  }
+  .octave .key.black[data-note="C#"] { left: 24px; }
+  .octave .key.black[data-note="D#"] { left: 62px; }
+  .octave .key.black[data-note="F#"] { left: 133px; }
+  .octave .key.black[data-note="G#"] { left: 170px; }
+  .octave .key.black[data-note="A#"] { left: 207px; }
+  .key-label { font-size: 8px; }
+  .kb-hint   { font-size: 7px; }
+}
