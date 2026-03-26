@@ -1,263 +1,863 @@
-/* ── Reset & base ─────────────────────────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ============================================
+   Piano Learning App — Design System
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+/* ---------- CSS Variables ---------- */
+:root {
+    --bg-primary: #0a0a1a;
+    --bg-secondary: #12122a;
+    --bg-card: rgba(255, 255, 255, 0.04);
+    --bg-glass: rgba(255, 255, 255, 0.06);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --text-primary: #f0f0ff;
+    --text-secondary: rgba(240, 240, 255, 0.6);
+    --text-muted: rgba(240, 240, 255, 0.35);
+    --accent-1: #7c5cff;
+    --accent-2: #00d4ff;
+    --accent-gradient: linear-gradient(135deg, #7c5cff, #00d4ff);
+    --glow-purple: rgba(124, 92, 255, 0.4);
+    --glow-cyan: rgba(0, 212, 255, 0.3);
+    --white-key: #f8f8ff;
+    --white-key-active: #d4d0ff;
+    --black-key: #1a1a2e;
+    --black-key-active: #4a3aaa;
+    --correct-note: #00e676;
+    --missed-note: #ff5252;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 40px var(--glow-purple), 0 0 80px var(--glow-cyan);
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
 }
 
 body {
-  background: #1a1a2e;
-  color: #e0e0e0;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  padding: 20px;
-  overflow-x: hidden;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* ── Header ───────────────────────────────────────────────────────────────── */
-header {
-  text-align: center;
+/* ---------- Background Ambiance ---------- */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(124, 92, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(0, 212, 255, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(245, 87, 108, 0.05) 0%, transparent 50%);
+    z-index: 0;
+    pointer-events: none;
+    animation: bgFloat 20s ease-in-out infinite alternate;
 }
 
-header h1 {
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  background: linear-gradient(135deg, #e0c080 0%, #f5e6b8 50%, #c8a84b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
+@keyframes bgFloat {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-2%, 2%) rotate(3deg);
+    }
 }
 
-header p {
-  margin-top: 6px;
-  font-size: 0.9rem;
-  color: #888;
-  letter-spacing: 0.04em;
+/* ---------- App Container ---------- */
+#app {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
 }
 
-/* ── Controls ─────────────────────────────────────────────────────────────── */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 10px 20px;
+/* ---------- Header / Navbar ---------- */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10, 10, 26, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-glass);
 }
 
-.controls label {
-  font-size: 0.85rem;
-  color: #aaa;
+.header .logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.controls input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 130px;
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(to right, #c8a84b, #444);
-  outline: none;
-  cursor: pointer;
+.header .logo span {
+    font-size: 1.8rem;
 }
 
-.controls input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #e0c080;
-  cursor: pointer;
-  box-shadow: 0 0 6px rgba(224,192,128,0.5);
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-/* ── Piano wrapper ────────────────────────────────────────────────────────── */
-.piano-wrapper {
-  background: linear-gradient(180deg, #2a1a0a 0%, #1a0f05 100%);
-  border-radius: 16px;
-  padding: 24px 20px 14px;
-  box-shadow:
-    0 8px 32px rgba(0,0,0,0.6),
-    0 2px 8px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-  border: 2px solid #3a2a14;
-  overflow-x: auto;
-  max-width: 100vw;
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
 }
 
-/* ── Piano keyboard ───────────────────────────────────────────────────────── */
-#piano {
-  display: flex;
-  flex-direction: row;
-  gap: 0;
-  user-select: none;
-  -webkit-user-select: none;
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-glass);
 }
 
-/* Each octave is a relative container so black keys can be positioned */
-.octave {
-  position: relative;
-  display: flex;
-  flex-direction: row;
+.btn-ghost:hover {
+    background: var(--bg-glass);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* ── White keys ───────────────────────────────────────────────────────────── */
+.btn-primary {
+    background: var(--accent-gradient);
+    color: white;
+    box-shadow: 0 4px 15px var(--glow-purple);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--glow-purple);
+}
+
+/* ---------- Home / Song Library View ---------- */
+.view {
+    display: none;
+    padding-top: 80px;
+}
+
+.view.active {
+    display: block;
+}
+
+.home-view {
+    padding: 100px 32px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.hero h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -1.5px;
+}
+
+.hero h1 .gradient-text {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero p {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.section-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-label .emoji {
+    font-size: 1.3rem;
+}
+
+/* ---------- Song Cards Grid ---------- */
+.songs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.song-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 28px 24px;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+}
+
+.song-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--card-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-smooth);
+}
+
+.song-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-card);
+    background: var(--bg-glass);
+}
+
+.song-card:hover::before {
+    opacity: 1;
+}
+
+.song-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.song-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.song-artist {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+}
+
+.song-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.song-difficulty {
+    display: flex;
+    gap: 3px;
+}
+
+.song-difficulty .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transition: background var(--transition-fast);
+}
+
+.song-difficulty .dot.filled {
+    background: var(--accent-1);
+    box-shadow: 0 0 6px var(--glow-purple);
+}
+
+.song-bpm {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.song-card .play-hint {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all var(--transition-spring);
+    box-shadow: 0 4px 15px var(--glow-purple);
+}
+
+.song-card:hover .play-hint {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.play-hint svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+    margin-left: 2px;
+}
+
+/* ---------- Learn Mode View ---------- */
+.learn-view {
+    padding-top: 70px;
+    height: 100vh;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.learn-view.active {
+    display: flex;
+}
+
+.learn-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(10, 10, 26, 0.6);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-glass);
+    flex-shrink: 0;
+}
+
+.learn-header .song-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.learn-header .song-info h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.learn-header .song-info .artist {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.learn-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.learn-controls .btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+}
+
+.speed-selector {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+}
+
+.speed-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.speed-btn.active {
+    background: var(--accent-1);
+    color: white;
+}
+
+.score-display {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.85rem;
+}
+
+.score-display .score-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.score-display .correct {
+    color: var(--correct-note);
+}
+
+.score-display .missed {
+    color: var(--missed-note);
+}
+
+/* ---------- Falling Notes Canvas Area ---------- */
+.falling-notes-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(10, 10, 26, 0.9) 0%, rgba(18, 18, 42, 0.5) 100%);
+}
+
+#notesCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* ---------- Piano Keyboard ---------- */
+.piano-container {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    padding: 12px 20px 20px;
+    background: linear-gradient(180deg, var(--bg-secondary), var(--bg-primary));
+    border-top: 1px solid var(--border-glass);
+}
+
+.piano {
+    display: flex;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.key {
+    position: relative;
+    cursor: pointer;
+    transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
 .key.white {
-  position: relative;
-  width: 44px;
-  height: 180px;
-  background: linear-gradient(180deg,
-    #f8f5ee 0%,
-    #f0ece3 60%,
-    #e8e2d5 100%
-  );
-  border: 1px solid #bbb;
-  border-radius: 0 0 8px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 8px;
-  cursor: pointer;
-  box-shadow:
-    2px 4px 6px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.9),
-    inset -1px 0 0 rgba(0,0,0,0.05);
-  transition: background 60ms, box-shadow 60ms, transform 60ms;
-  z-index: 1;
+    width: 52px;
+    height: 180px;
+    background: var(--white-key);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    z-index: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 -4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .key.white:hover {
-  background: linear-gradient(180deg, #fffcf5 0%, #f7f3ea 60%, #f0ebe0 100%);
+    background: #eeeefd;
 }
 
-.key.white.active {
-  background: linear-gradient(180deg, #dfd8c8 0%, #d4ccba 100%);
-  box-shadow:
-    1px 2px 3px rgba(0,0,0,0.4),
-    inset 0 2px 4px rgba(0,0,0,0.12);
-  transform: translateY(2px);
+.key.white.active,
+.key.white.pressed {
+    background: var(--white-key-active);
+    transform: scaleY(0.98);
+    transform-origin: top;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* ── Black keys ───────────────────────────────────────────────────────────── */
+.key.white.highlight {
+    background: linear-gradient(180deg, #b8ffcf 0%, #7dffad 100%);
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+}
+
+.key.white.upcoming {
+    background: linear-gradient(180deg, #e8e4ff 0%, #d4d0ff 100%);
+    box-shadow: 0 0 10px var(--glow-purple);
+}
+
 .key.black {
-  position: absolute;
-  width: 26px;
-  height: 112px;
-  background: linear-gradient(180deg,
-    #3a3a3a 0%,
-    #1a1a1a 60%,
-    #0d0d0d 100%
-  );
-  border: 1px solid #000;
-  border-radius: 0 0 5px 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 5px;
-  cursor: pointer;
-  box-shadow:
-    2px 5px 8px rgba(0,0,0,0.7),
-    inset 0 1px 0 rgba(255,255,255,0.15),
-    inset -1px 0 0 rgba(255,255,255,0.04);
-  z-index: 2;
-  transition: background 60ms, box-shadow 60ms, transform 60ms;
+    width: 32px;
+    height: 115px;
+    background: var(--black-key);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 5px 5px;
+    position: absolute;
+    z-index: 2;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
 }
 
 .key.black:hover {
-  background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 60%, #181818 100%);
+    background: #252540;
 }
 
-.key.black.active {
-  background: linear-gradient(180deg, #555 0%, #333 100%);
-  box-shadow:
-    1px 2px 4px rgba(0,0,0,0.8),
-    inset 0 2px 4px rgba(0,0,0,0.3);
-  transform: translateY(2px);
+.key.black.active,
+.key.black.pressed {
+    background: var(--black-key-active);
+    transform: scaleY(0.97);
+    transform-origin: top;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 -2px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* ── Black key positioning within each octave ─────────────────────────────── */
-/* C# is after C (1st white = 0..43, C# sits at 31px) */
-.octave .key.black[data-note="C#"] { left: 30px; }
-.octave .key.black[data-note="D#"] { left: 75px; }
-.octave .key.black[data-note="F#"] { left: 162px; }
-.octave .key.black[data-note="G#"] { left: 207px; }
-.octave .key.black[data-note="A#"] { left: 252px; }
-
-/* ── Labels ───────────────────────────────────────────────────────────────── */
-.key-label {
-  font-size: 10px;
-  font-weight: 600;
-  pointer-events: none;
-  letter-spacing: 0.02em;
+.key.black.highlight {
+    background: linear-gradient(180deg, #00c853 0%, #00a843 100%);
+    box-shadow: 0 0 20px rgba(0, 200, 83, 0.5);
 }
 
-.key.white .key-label { color: #888; }
-.key.black .key-label { color: #666; }
-
-.kb-hint {
-  display: block;
-  font-size: 9px;
-  font-weight: 700;
-  pointer-events: none;
-  margin-top: 2px;
-  background: rgba(0,0,0,0.15);
-  border-radius: 3px;
-  padding: 1px 3px;
-  letter-spacing: 0;
+.key.black.upcoming {
+    background: linear-gradient(180deg, #5a4abf 0%, #4a3aaa 100%);
+    box-shadow: 0 0 10px var(--glow-purple);
 }
 
-.key.white .kb-hint { color: #aaa; }
-.key.black .kb-hint { color: #888; }
-
-/* ── Keyboard legend ──────────────────────────────────────────────────────── */
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  max-width: 640px;
-  font-size: 0.78rem;
-  color: #666;
+.key .key-label {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.25);
+    pointer-events: none;
 }
 
-.legend-title {
-  width: 100%;
-  text-align: center;
-  color: #888;
-  font-size: 0.82rem;
-  margin-bottom: 2px;
+.key.black .key-label {
+    color: rgba(255, 255, 255, 0.3);
+    bottom: 8px;
+    font-size: 0.55rem;
 }
 
-.legend kbd {
-  display: inline-block;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-family: monospace;
-  font-size: 0.78rem;
-  color: #ccc;
+/* ---------- Results Overlay ---------- */
+.results-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(10, 10, 26, 0.92);
+    backdrop-filter: blur(20px);
+    align-items: center;
+    justify-content: center;
 }
 
-/* ── Responsive ───────────────────────────────────────────────────────────── */
-@media (max-width: 700px) {
-  .key.white { width: 36px; height: 150px; }
-  .key.black { width: 22px; height: 92px;  }
-  .octave .key.black[data-note="C#"] { left: 24px; }
-  .octave .key.black[data-note="D#"] { left: 62px; }
-  .octave .key.black[data-note="F#"] { left: 133px; }
-  .octave .key.black[data-note="G#"] { left: 170px; }
-  .octave .key.black[data-note="A#"] { left: 207px; }
-  .key-label { font-size: 8px; }
-  .kb-hint   { font-size: 7px; }
+.results-overlay.active {
+    display: flex;
+}
+
+.results-card {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    padding: 48px 56px;
+    text-align: center;
+    backdrop-filter: blur(24px);
+    box-shadow: var(--shadow-glow);
+    animation: popIn 0.5s var(--transition-spring);
+    max-width: 420px;
+    width: 90%;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.results-card h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.results-card .results-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+}
+
+.results-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 32px;
+}
+
+.results-stat {
+    text-align: center;
+}
+
+.results-stat .value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.results-stat .label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.results-stat.correct .value {
+    color: var(--correct-note);
+}
+
+.results-stat.missed .value {
+    color: var(--missed-note);
+}
+
+.results-stat.accuracy .value {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.results-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+/* ---------- Wait Mode Indicator ---------- */
+.wait-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-smooth);
+    text-shadow: 0 0 20px var(--glow-cyan);
+}
+
+.wait-indicator.visible {
+    opacity: 1;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ---------- Free Play Badge ---------- */
+.free-play-section {
+    margin-top: 48px;
+}
+
+.free-play-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    backdrop-filter: blur(12px);
+}
+
+.free-play-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-card);
+}
+
+.free-play-info h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.free-play-info p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .header {
+        padding: 12px 16px;
+    }
+
+    .home-view {
+        padding: 90px 16px 40px;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .songs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .key.white {
+        width: 36px;
+        height: 140px;
+    }
+
+    .key.black {
+        width: 24px;
+        height: 90px;
+    }
+
+    .learn-header {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+    .results-card {
+        padding: 32px 24px;
+    }
+}
+
+/* ---------- Utility Animations ---------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.slide-up {
+    animation: slideUp 0.5s ease-out both;
+}
+
+.slide-up-delay-1 {
+    animation-delay: 0.1s;
+}
+
+.slide-up-delay-2 {
+    animation-delay: 0.2s;
+}
+
+.slide-up-delay-3 {
+    animation-delay: 0.3s;
+}
+
+/* ---------- Particles (correct note hit) ---------- */
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 50;
+    animation: particleBurst 0.6s ease-out forwards;
+}
+
+@keyframes particleBurst {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--px), var(--py)) scale(0);
+    }
 }

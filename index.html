@@ -1,48 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Piano</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn to play famous piano songs like Golden Hour, Moonlight Sonata, and more with an interactive virtual piano and Guitar Hero-style falling notes.">
+    <title>PianoFlow — Learn Famous Songs on Piano</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎹</text></svg>">
 </head>
 <body>
+    <div id="app">
 
-  <header>
-    <h1>🎹 Piano</h1>
-    <p>Click keys · Use your keyboard · Or touch on mobile</p>
-  </header>
+        <!-- ======== Header ======== -->
+        <header class="header">
+            <div class="logo" id="logoBtn">
+                <span>🎹</span> PianoFlow
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost" id="freePlayBtn" onclick="document.getElementById('freePlayCard').click()">🎵 Free Play</button>
+            </div>
+        </header>
 
-  <div class="controls">
-    <label for="volume">Volume</label>
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.9" />
-  </div>
+        <!-- ======== Home View ======== -->
+        <section id="homeView" class="view home-view active">
+            <div class="hero slide-up">
+                <h1>Learn Your Favorite<br><span class="gradient-text">Piano Songs</span></h1>
+                <p>Play along with guided falling notes. From Golden Hour to Moonlight Sonata — learn at your own pace.</p>
+            </div>
 
-  <div class="piano-wrapper">
-    <div id="piano"></div>
-  </div>
+            <div class="section-label slide-up slide-up-delay-1">
+                <span class="emoji">🔥</span> Popular Songs
+            </div>
 
-  <div class="legend">
-    <div class="legend-title">Keyboard shortcuts (two playable octaves)</div>
-    <span><kbd>A</kbd> C3</span>
-    <span><kbd>W</kbd> C#3</span>
-    <span><kbd>S</kbd> D3</span>
-    <span><kbd>E</kbd> D#3</span>
-    <span><kbd>D</kbd> E3</span>
-    <span><kbd>F</kbd> F3</span>
-    <span><kbd>T</kbd> F#3</span>
-    <span><kbd>G</kbd> G3</span>
-    <span><kbd>Y</kbd> G#3</span>
-    <span><kbd>H</kbd> A3</span>
-    <span><kbd>U</kbd> A#3</span>
-    <span><kbd>J</kbd> B3</span>
-    <span><kbd>K</kbd> C4</span>
-    <span><kbd>O</kbd> C#4</span>
-    <span><kbd>L</kbd> D4</span>
-    <span><kbd>P</kbd> D#4</span>
-    <span><kbd>;</kbd> E4</span>
-  </div>
+            <div class="songs-grid" id="songsGrid">
+                <!-- Rendered by JS -->
+            </div>
 
-  <script src="piano.js"></script>
+            <div class="free-play-section slide-up slide-up-delay-3">
+                <div class="free-play-card" id="freePlayCard">
+                    <div class="free-play-info">
+                        <h3>🎹 Free Play Mode</h3>
+                        <p>No rules — just play the piano freely with your keyboard or mouse.</p>
+                    </div>
+                    <div class="play-hint" style="position:static; opacity:1; transform:scale(1);">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======== Learn View ======== -->
+        <section id="learnView" class="view learn-view">
+            <!-- Learn Header -->
+            <div class="learn-header">
+                <div class="song-info">
+                    <div>
+                        <h2 id="learnSongTitle">Song Title</h2>
+                        <span class="artist" id="learnSongArtist">Artist</span>
+                    </div>
+                </div>
+
+                <div class="learn-controls">
+                    <button class="btn btn-ghost" id="btnPlayPause">▶ Play</button>
+                    <button class="btn btn-ghost" id="btnRestart">↻ Restart</button>
+                    <button class="btn btn-primary" id="btnWaitMode">⏳ Wait: ON</button>
+
+                    <div class="speed-selector">
+                        <button class="speed-btn" data-speed="0.5">0.5×</button>
+                        <button class="speed-btn" data-speed="0.75">0.75×</button>
+                        <button class="speed-btn active" data-speed="1">1×</button>
+                    </div>
+
+                    <div class="score-display">
+                        <div class="score-item correct">✓ <span id="scoreCorrect">0</span></div>
+                        <div class="score-item missed">✗ <span id="scoreMissed">0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Falling Notes Area -->
+            <div class="falling-notes-area">
+                <canvas id="notesCanvas"></canvas>
+                <div class="wait-indicator" id="waitIndicator">Press the highlighted key to continue...</div>
+            </div>
+
+            <!-- Piano Keyboard -->
+            <div class="piano-container" id="pianoContainer">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- ======== Results Overlay ======== -->
+        <div class="results-overlay" id="resultsOverlay">
+            <div class="results-card">
+                <h2>🎉 Song Complete!</h2>
+                <p class="results-subtitle">Here's how you did</p>
+
+                <div class="results-stats">
+                    <div class="results-stat correct">
+                        <div class="value" id="resultsCorrect">0</div>
+                        <div class="label">Correct</div>
+                    </div>
+                    <div class="results-stat missed">
+                        <div class="value" id="resultsMissed">0</div>
+                        <div class="label">Missed</div>
+                    </div>
+                    <div class="results-stat accuracy">
+                        <div class="value" id="resultsAccuracy">0%</div>
+                        <div class="label">Accuracy</div>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn btn-primary" id="btnRetry">↻ Try Again</button>
+                    <button class="btn btn-ghost" id="btnBackHome">← Song Library</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
